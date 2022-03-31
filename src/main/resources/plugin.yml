@@ -1,0 +1,13 @@
+name: AprilFools
+version: '${version}'
+main: xyz.holocons.aprilfools.AprilFools
+api-version: 1.18
+prefix: "April Fools"
+depend: [ DiscordSRV ]
+authors: [ TraceL ]
+description: April Fools plugin for HLC
+website: mc.holocons.xyz
+
+commands:
+  schizopeko:
+    usage: /schizopeko <true/false>
