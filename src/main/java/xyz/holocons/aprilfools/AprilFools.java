@@ -1,7 +1,6 @@
 package xyz.holocons.aprilfools;
 
 import github.scarsz.discordsrv.DiscordSRV;
-import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
@@ -11,6 +10,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,10 +50,10 @@ public final class AprilFools extends JavaPlugin implements Listener, CommandExe
             return true;
         }
 
-        if (args[1].equalsIgnoreCase("true")) {
+        if (args[0].equalsIgnoreCase("true")) {
             setActivation(true);
             sender.sendMessage(Component.text("April Fools enabled!", NamedTextColor.GREEN));
-        } else if (args[1].equalsIgnoreCase("false")) {
+        } else if (args[0].equalsIgnoreCase("false")) {
             setActivation(false);
             sender.sendMessage(Component.text("April Fools disabled!", NamedTextColor.RED));
         } else {
@@ -72,24 +72,24 @@ public final class AprilFools extends JavaPlugin implements Listener, CommandExe
         return List.of("true", "false");
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onChat(AsyncChatEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onChat(AsyncPlayerChatEvent event) {
         if (isNotActivated())
             return;
 
-        var msg = event.message();
+        var msg = event.getMessage();
 
         int currentTick = getServer().getCurrentTick();
 
         // 33% equal rates of nothing, peko, or motherfucker
         // Probably not exactly equal cuz multiples lmao
-        if (currentTick % 3 == 0) {
-            msg = msg.append(Component.text(" peko"));
-        } else if (currentTick % 2 == 0) {
-            msg = msg.append(Component.text(" motherfucker"));
+        if (currentTick % 2 == 0) {
+            msg = msg + " peko";
+        } else if (currentTick % 3 == 0) {
+            msg = msg + " motherfucker";
         }
 
-        event.message(msg);
+        event.setMessage(msg);
     }
 
     @Override
